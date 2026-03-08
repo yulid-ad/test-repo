@@ -11,7 +11,7 @@ select customer_id
 select subscription_id
       ,customer_id
       ,plan_name
-      ,plan_status
+      ,subscription_status
       ,start_date
       ,end_date
       ,monthly_cost
@@ -21,15 +21,15 @@ select subscription_id
 select subscription_id
       ,customer_id
       ,plan_name
-      ,plan_status
+      ,subscription_status
       ,start_date
       ,monthly_cost
-      ,case when plan_status = 'Pending' then 0
+      ,case when subscription_status = 'Pending' then 0
             else ceil(date_diff('day', start_date, coalesce(end_date, date('2025-05-31'))) / 30)
         end as subscription_duration_months
-      ,case when plan_status = 'Pending' then 1 else 0 end as is_pending
-      ,case when plan_status = 'Cancelled' then 1 else 0 end as is_cancelled
-      ,case when plan_status = 'Active' then 1 else 0 end as is_active
+      ,case when subscription_status = 'Pending' then 1 else 0 end as is_pending
+      ,case when subscription_status = 'Cancelled' then 1 else 0 end as is_cancelled
+      ,case when subscription_status = 'Active' then 1 else 0 end as is_active
   from subscriptions
 )
 , customer_subscription_metrics as (
