@@ -7,7 +7,6 @@
         on_schema_change='fail'
     )
 }}
-
   with customers as (
 select customer_id
       ,customer_name
@@ -21,12 +20,12 @@ select customer_id
 select subscription_id
       ,customer_id
       ,plan_name
-      ,plan_status
+      ,subscription_status
       ,start_date
       ,end_date
       ,monthly_cost
   from {{ ref('int_subscriptions') }}
- where plan_status in ('Active', 'Cancelled')
+ where subscription_status in ('Active', 'Cancelled')
 )
 , date_spine as (
 {{ dbt_utils.date_spine(
@@ -42,7 +41,7 @@ select d.date_day
       ,s.subscription_id
       ,s.customer_id
       ,s.plan_name
-      ,s.plan_status
+      ,s.subscription_status
       ,s.start_date
       ,s.end_date
       ,s.monthly_cost
