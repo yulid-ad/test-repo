@@ -1,0 +1,110 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Aggregated subscription metrics per customer"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer. PK"
+        data_type: int
+        constraints:
+          - type: not_null
+          - type: primary_key
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Full name of the customer"
+        data_type: varchar(255)
+        tests:
+          - not_null
+      - name: customer_email
+        description: "Email address of the customer"
+        data_type: varchar(255)
+        tests:
+          - not_null
+      - name: region
+        description: "Region of the customer"
+        data_type: varchar(50)
+      - name: marketing_source
+        description: "Acquisition marketing channel"
+        data_type: varchar(50)
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Organic', 'Paid Social', 'Google Ads', 'Referral']
+      - name: first_subscription_date
+        description: "Date of first subscription"
+        data_type: date
+      - name: current_subscription_status
+        description: "Current overall subscription status of the customer (Active, Pending, Cancelled, Never Subscribed)"
+        data_type: varchar(20)
+        tests:
+          - accepted_values:
+              values: ['Active', 'Pending', 'Cancelled', 'Never Subscribed']
+      - name: current_active_plans
+        description: "List of currently active plan names"
+        data_type: varchar(255)
+      - name: total_lifetime_value
+        description: "Total lifetime value of the customer"
+        data_type: decimal(18,2)
+      - name: total_subscriptions_count
+        description: "Total number of subscriptions"
+        data_type: int
+        tests:
+          - not_null
+      - name: active_subscriptions_count
+        description: "Subscription count currently active"
+        data_type: int
+      - name: pending_subscriptions_count
+        description: "Subscription count currently in pending status"
+        data_type: int
+      - name: cancelled_subscriptions_count
+        description: "Subscription count that have been cancelled"
+        data_type: int
+    tests:
+      - dbt_utils.expression_is_true:
+          name: "check_subscription_counts"
+          expression: "total_subscriptions_count = active_subscriptions_count + pending_subscriptions_count + cancelled_subscriptions_count"
+      - dbt_utils.expression_is_true:
+          name: "check_on_current_subscription_status"
+          expression: "current_subscription_status != 'Active' OR active_subscriptions_count > 0"
+
+
+  - name: fct_mrr_monthly
+    description: "Monthly MRR metrics at the customer level. Incremental table"
+    columns: 
+      - name: mrr_sk
+        description: "Surrogate key generated based on year, month and customer_id"
+        data_type: varchar(32)
+        constraints:
+          - type: not_null
+          - type: primary_key
+        tests:
+          - unique
+          - not_null
+      - name: year
+        description: "Reporting year"
+        data_type: varchar(4)
+      - name: month
+        description: "Reporting month"
+        data_type: varchar(2)
+      - name: customer_id
+        description: "Unique identifier for each customer. FK to dim_customers.customer_id"
+        data_type: int
+        tests:
+          - relationships:
+                  to: ref('dim_customers')
+                  field: customer_id    
+      - name: monthly_recurring_revenue
+        description: "Monthly recurring revenue for the customer"
+        data_type: decimal(18,2)
+    tests:
+      - dbt_utils.expression_is_true:
+          name: "mrr_non_negative"
+          expression: "monthly_recurring_revenue >= 0"
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - year
+            - month
+            - customer_id

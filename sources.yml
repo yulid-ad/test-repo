@@ -1,0 +1,49 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw 
+    freshness:
+      warn_after: {count: 24, period: hour}
+      error_after: {count: 48, period: hour}
+    tables:
+      - name: customers
+        description: "Source customers data"
+        columns:
+          - name: id
+            description: "Unique customer identifier"
+          - name: name
+            description: "Customer full name"
+          - name: email
+            description: "Customer email address"
+          - name: signup_at
+            description: "Customer signup timestamp"
+          - name: metadata
+            description: "JSON object containing region, marketing source, ip address"
+
+      - name: subscriptions
+        description: "Source subscriptions data"
+        columns:
+          - name: id
+            description: "Unique subscription identifier"
+          - name: customer_id
+            description: "Unique identifier for each customer. FK to customers table"
+          - name: plan_id
+            description: "Unique identifier for each plan. FK to plans table"
+          - name: status
+            description: "Subscription status"
+          - name: start_date
+            description: "Subscription start date"
+          - name: end_date
+            description: "Subscription end date (null if active)"
+      
+
+      - name: plans
+        description: "Source plans data"
+        columns:
+          - name: id
+            description: "Unique plan identifier. PK"
+          - name: name
+            description: "Plan name"
+          - name: monthly_cost
+            description: "Monthly subscription cost"

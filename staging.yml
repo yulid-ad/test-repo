@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Staging model for customers data"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer. PK"
+        tests:
+            - unique
+            - not_null
+      - name: customer_name
+        description: "Customer's name"
+      - name: customer_email
+        description: "Customer's email address"
+      - name: signup_at
+        description: "Sign up timestamp"
+      - name: region_raw
+        description: "Raw region data"
+      - name: marketing_source_raw
+        description: "Raw marketing source data"
+
+  - name: stg_subscriptions
+    description: "Staging model for subscriptions data"
+    columns:
+      - name: subscription_id
+        description: "Unique identifier for each subscription. PK"
+        tests:
+            - unique
+            - not_null
+      - name: customer_id
+        description: "Unique identifier for each customer. FK to stg_customers.customer_id"
+        tests:
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: plan_id
+        description: "Unique identifier for each subscription plan. FK to stg_plans.plan_id"
+        tests:
+          - relationships:
+              to: ref('stg_plans')
+              field: plan_id
+      - name: status_code
+        description: "Current subscription status"
+      - name: start_date
+        description: "Subscription start date"
+      - name: end_date
+        description: "Subscription end date"
+
+  - name: stg_plans
+    description: "Staging model for subscription plans data"
+    columns:
+      - name: plan_id
+        description: "Unique identifier for each plan. PK"
+        tests:
+            - unique
+            - not_null
+      - name: plan_name
+        description: "Subscription plan name"
+      - name: monthly_cost
+        description: "Monthly price of the plan"
