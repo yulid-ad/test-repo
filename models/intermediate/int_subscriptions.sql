@@ -14,15 +14,15 @@ select plan_id
   from {{ ref('stg_plans') }}
 )
 , subscription_details as (
-select subscription_id
-      ,customer_id
+select s.subscription_id
+      ,s.customer_id
       ,p.plan_name
-      ,case when status_code = 'active' then 'Active' 
-            when status_code in ('cancelled','canceled') then 'Cancelled' 
-            when status_code = 'pending' then 'Pending'   
+      ,case when s.status_code = 'active' then 'Active' 
+            when s.status_code in ('cancelled','canceled') then 'Cancelled' 
+            when s.status_code = 'pending' then 'Pending'   
         end as plan_status
-      ,start_date
-      ,end_date
+      ,s.start_date
+      ,s.end_date
       ,p.monthly_cost
   from subscriptions s
   join plans p on s.plan_id = p.plan_id
