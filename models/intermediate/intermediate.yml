@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: int_customers
+    description: "Intermediate model for customers data"
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer. PK"
+        tests:
+          - unique
+          - not_null
+      - name: customer_name
+        description: "Customer's name"
+        tests:
+          - not_null
+      - name: customer_email
+        description: "Customer's email address"
+        tests:
+          - not_null
+      - name: signup_at
+        description: "Timestamp when the customer signed up"
+        tests:
+          - not_null
+      - name: region_raw
+        description: "Raw region data"
+      - name: marketing_source_raw
+        description: "Raw marketing source data"
+        tests:
+          - accepted_values:
+              values: ['Organic', 'Paid', 'Google Ads', 'Referral']
+
+  - name: int_subscriptions
+    description: "Intermediate model for subscriptions data with plan details"
+    columns:
+      - name: subscription_id
+        description: "Unique identifier for each subscription. PK"
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        description: "Unique identifier for each customer. FK to int_customers.customer_id"
+        tests:
+          - not_null
+      - name: plan_name
+        description: "Name of the subscription plan"
+      - name: plan_status
+        description: "Current subscription status"
+        tests:
+          - accepted_values:
+              values: ['Active', 'Pending', 'Cancelled']
+      - name: start_date
+        description: "Subscription start date"
+        tests:
+          - not_null
+      - name: end_date
+        description: "Subscription end date"
+      - name: monthly_price
+        description: "Monthly price of the subscription plan"
+        tests:
+          - not_null
