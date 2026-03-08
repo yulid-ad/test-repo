@@ -20,7 +20,7 @@ select s.subscription_id
       ,case when s.status_code = 'active' then 'Active' 
             when s.status_code in ('cancelled','canceled') then 'Cancelled' 
             when s.status_code = 'pending' then 'Pending'   
-        end as plan_status
+        end as subscription_status
       ,s.start_date
       ,s.end_date
       ,p.monthly_cost
@@ -30,7 +30,7 @@ select s.subscription_id
 select subscription_id
       ,customer_id
       ,plan_name
-      ,plan_status
+      ,subscription_status
       ,start_date
       ,end_date
       ,monthly_cost
