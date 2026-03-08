@@ -21,11 +21,17 @@ models:
     +persist_docs:
       relation: true
       columns: true
+
     staging:
       +materialized: view
+      +schema: staging  
+
     intermediate:
       +materialized: table
+      +schema: intermediate 
+
     marts:
       +materialized: table
+      +schema: marts  
       +contract:
         enforced: true
