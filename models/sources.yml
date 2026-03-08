@@ -35,8 +35,7 @@ sources:
           - name: start_date
             description: "Subscription start date"
           - name: end_date
-            description: "Subscription end date (null if active)"
-      
+            description: "Subscription end date (null if active)" 
 
       - name: plans
         description: "Source plans data"
