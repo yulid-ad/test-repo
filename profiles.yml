@@ -1,0 +1,17 @@
+pion:
+  target: dev
+  outputs:
+    dev:
+      type: athena
+      s3_staging_dir: s3://testbucketyulid/test1/
+      region_name: eu-north-1
+      database: pion_db
+      schema: analytics
+      work_group: primary
+      skip_workgroup_check: True
+      threads: 4
+      poll_interval: 5
+      num_retries: 3
+      
+      aws_access_key_id: "{{ env_var('AWS_ACCESS_KEY_ID') }}"
+      aws_secret_access_key: "{{ env_var('AWS_SECRET_ACCESS_KEY') }}"
