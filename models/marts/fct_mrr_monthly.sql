@@ -79,4 +79,4 @@ select {{ dbt_utils.generate_surrogate_key(['year', 'month', 'customer_id']) }} 
       ,month
       ,customer_id
       ,monthly_recurring_revenue
-  from final;
+  from final
