@@ -17,14 +17,14 @@ models:
         description: "Customer's email address"
         tests:
           - not_null
-      - name: signup_at
-        description: "Timestamp when the customer signed up"
+      - name: signup_date
+        description: "Customer signed up date"
         tests:
           - not_null
-      - name: region_raw
-        description: "Raw region data"
-      - name: marketing_source_raw
-        description: "Raw marketing source data"
+      - name: region
+        description: "Region data"
+      - name: marketing_source
+        description: "Marketing source data"
         tests:
           - accepted_values:
               values: ['Organic', 'Paid', 'Google Ads', 'Referral']
@@ -43,7 +43,7 @@ models:
           - not_null
       - name: plan_name
         description: "Name of the subscription plan"
-      - name: plan_status
+      - name: subscription_status
         description: "Current subscription status"
         tests:
           - accepted_values:
@@ -54,7 +54,7 @@ models:
           - not_null
       - name: end_date
         description: "Subscription end date"
-      - name: monthly_price
+      - name: monthly_cost
         description: "Monthly price of the subscription plan"
         tests:
           - not_null
