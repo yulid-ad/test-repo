@@ -32,14 +32,16 @@ models:
         description: "Unique identifier for each customer. FK to stg_customers.customer_id"
         tests:
           - relationships:
-              to: ref('stg_customers')
-              field: customer_id
+              arguments:
+                to: ref('stg_customers')
+                field: customer_id
       - name: plan_id
         description: "Unique identifier for each subscription plan. FK to stg_plans.plan_id"
         tests:
           - relationships:
-              to: ref('stg_plans')
-              field: plan_id
+              arguments:
+                to: ref('stg_plans')
+                field: plan_id
       - name: status_code
         description: "Current subscription status"
       - name: start_date
