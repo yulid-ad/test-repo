@@ -32,7 +32,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Organic', 'Paid Social', 'Google Ads', 'Referral']
+              arguments:
+                values: ['Organic', 'Paid Social', 'Google Ads', 'Referral']
       - name: first_subscription_date
         description: "Date of first subscription"
         data_type: date
@@ -41,7 +42,8 @@ models:
         data_type: varchar(20)
         tests:
           - accepted_values:
-              values: ['Active', 'Pending', 'Cancelled', 'Never Subscribed']
+              arguments:
+                values: ['Active', 'Pending', 'Cancelled', 'Never Subscribed']
       - name: current_active_plans
         description: "List of currently active plan names"
         data_type: varchar(255)
@@ -94,8 +96,9 @@ models:
         data_type: int
         tests:
           - relationships:
-                  to: ref('dim_customers')
-                  field: customer_id    
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id    
       - name: monthly_recurring_revenue
         description: "Monthly recurring revenue for the customer"
         data_type: decimal(18,2)
