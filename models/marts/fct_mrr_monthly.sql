@@ -30,8 +30,8 @@ select subscription_id
 , date_spine as (
 {{ dbt_utils.date_spine(
       datepart="day",
-      start_date="2024-01-01",
-      end_date="2025-05-31"
+      start_date="cast('2024-01-01' as date)",
+      end_date="cast('2025-05-31' as date)"
      )
   }}
 )
@@ -51,7 +51,7 @@ select d.date_day
    and (s.end_date is null or s.end_date >= d.date_day)
 
    {% if is_incremental() %}
-   and date(date_trunc('month', d.date_day)) >= date_add(month, -2, date_trunc('month', current_date))
+   and date(date_trunc('month', d.date_day)) >= date_add('month', -2, date_trunc('month', current_date))
    {% endif %}
 
 )
