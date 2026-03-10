@@ -27,7 +27,8 @@ models:
         description: "Marketing source data"
         tests:
           - accepted_values:
-              values: ['Organic', 'Paid', 'Google Ads', 'Referral']
+              arguments:
+                values: ['Organic', 'Paid', 'Google Ads', 'Referral']
 
   - name: int_subscriptions
     description: "Intermediate model for subscriptions data with plan details"
@@ -47,7 +48,8 @@ models:
         description: "Current subscription status"
         tests:
           - accepted_values:
-              values: ['Active', 'Pending', 'Cancelled']
+              arguments:
+                values: ['Active', 'Pending', 'Cancelled']
       - name: start_date
         description: "Subscription start date"
         tests:

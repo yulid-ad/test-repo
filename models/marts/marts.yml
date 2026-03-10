@@ -32,7 +32,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Organic', 'Paid Social', 'Google Ads', 'Referral']
+              arguments:
+                values: ['Organic', 'Paid Social', 'Google Ads', 'Referral']
       - name: first_subscription_date
         description: "Date of first subscription"
         data_type: date
@@ -41,7 +42,8 @@ models:
         data_type: varchar(20)
         tests:
           - accepted_values:
-              values: ['Active', 'Pending', 'Cancelled', 'Never Subscribed']
+              arguments:
+                values: ['Active', 'Pending', 'Cancelled', 'Never Subscribed']
       - name: current_active_plans
         description: "List of currently active plan names"
         data_type: varchar(255)
@@ -64,11 +66,13 @@ models:
         data_type: int
     tests:
       - dbt_utils.expression_is_true:
-          name: "check_subscription_counts"
-          expression: "total_subscriptions_count = active_subscriptions_count + pending_subscriptions_count + cancelled_subscriptions_count"
+          arguments:
+            name: "check_subscription_counts"
+            expression: "total_subscriptions_count = active_subscriptions_count + pending_subscriptions_count + cancelled_subscriptions_count"
       - dbt_utils.expression_is_true:
-          name: "check_on_current_subscription_status"
-          expression: "current_subscription_status != 'Active' OR active_subscriptions_count > 0"
+          arguments:
+            name: "check_on_current_subscription_status"
+            expression: "current_subscription_status != 'Active' OR active_subscriptions_count > 0"
 
 
   - name: fct_mrr_monthly
@@ -94,17 +98,20 @@ models:
         data_type: int
         tests:
           - relationships:
-                  to: ref('dim_customers')
-                  field: customer_id    
+              arguments:
+                to: ref('dim_customers')
+                field: customer_id    
       - name: monthly_recurring_revenue
         description: "Monthly recurring revenue for the customer"
         data_type: decimal(18,2)
     tests:
       - dbt_utils.expression_is_true:
-          name: "mrr_non_negative"
-          expression: "monthly_recurring_revenue >= 0"
+          arguments:
+            name: "mrr_non_negative"
+            expression: "monthly_recurring_revenue >= 0"
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - year
-            - month
-            - customer_id
+          arguments:
+            combination_of_columns:
+              - year
+              - month
+              - customer_id
